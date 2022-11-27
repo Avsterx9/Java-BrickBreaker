@@ -10,6 +10,11 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import com.mycompany.brickbreaker.ScreenPanel;
 import com.mycompany.brickbreaker.StatesManager;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuState extends GameState {
     
@@ -25,6 +30,8 @@ public class MenuState extends GameState {
     private int particleCount = 80;
     private RandomGenerator random = new RandomGenerator();
 
+    private BufferedImage bufferedImage;
+    
     public MenuState(StatesManager sm) {
         super(sm);
         initParticles();
@@ -44,14 +51,18 @@ public class MenuState extends GameState {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, ScreenPanel.WIDTH, ScreenPanel.HEIGHT);
-        
-        for(Particle p : particles){
-            p.draw(g);
+        if(bufferedImage == null){
+            loadImage();
         }
         
-        setDashboard(g);
+        Graphics2D g2 = (Graphics2D)g;
+        g2.drawImage(bufferedImage,0,0,ScreenPanel.WIDTH, ScreenPanel.HEIGHT,null);
+        
+        for(Particle p : particles){
+            p.draw(g2);
+        }
+        
+        setDashboard(g2);
         
         for(int i = 0;i < options.length; i++){
             if(i == selected){
@@ -118,5 +129,17 @@ public class MenuState extends GameState {
                    random.getRandomIntValue(30, 80)
            ));
        } 
+    }
+    
+    private void loadImage(){
+        try {
+             bufferedImage = loadImageFromResources("/bg.jpg");
+        } catch (IOException ex) {
+            Logger.getLogger(MenuState.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private BufferedImage loadImageFromResources(String name) throws IOException{
+        return javax.imageio.ImageIO.read(MenuState.class.getResource(name));
     }
 }
