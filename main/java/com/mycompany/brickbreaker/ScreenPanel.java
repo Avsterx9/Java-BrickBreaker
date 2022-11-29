@@ -22,10 +22,11 @@ public class ScreenPanel extends JPanel implements KeyListener {
     private StatesManager sm;
     
     public ScreenPanel() {
+        setFocusable(true);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         start();  
         
-        setFocusable(true);
+
         setVisible(true); 
         addKeyListener(this);
     }
@@ -58,12 +59,10 @@ public class ScreenPanel extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         sm.KeyPressed(e.getKeyCode());
-        e.consume();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         sm.KeyReleased(e.getKeyCode());
-        e.consume();
     }
 }

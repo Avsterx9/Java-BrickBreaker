@@ -1,5 +1,6 @@
 package Helpers;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,38 +15,33 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundManager {
-    private String path = "resources/";
 
     public SoundManager() {
     }
     
     public void playScoreSound(){   
-        playSound("beep_sound.wav");
+        playSound("/beep_sound.wav");
     }
     
     public void playGameOverSound(){   
-        playSound("gameover_sound.wav");
+        playSound("/gameover_sound.wav");
     }
     
     public void playBallHitSound(){   
-        playSound("ballhit_sound.wav");
+        playSound("/ballhit_sound.wav");
     }
     
     public void playSelectSound(){   
-        playSound("select_sound.wav");
+        playSound("/select_sound.wav");
     }
     
     public void playWinSound(){   
-        playSound("win_sound.wav");
+        playSound("/win_sound.wav");
     }
     
     private void playSound(String soundName){
-        URL res = getClass().getClassLoader().getResource(soundName);
-
-        AudioInputStream audioInputStream;
         try {
-            File f = Paths.get(res.toURI()).toFile();
-            audioInputStream = AudioSystem.getAudioInputStream(f.getAbsoluteFile());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(SoundManager.class.getResourceAsStream(soundName)));
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
@@ -54,8 +50,6 @@ public class SoundManager {
         } catch (IOException ex) {
             Logger.getLogger(SoundManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (LineUnavailableException ex) {
-            Logger.getLogger(SoundManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
             Logger.getLogger(SoundManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
